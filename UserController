@@ -25,5 +25,23 @@ public class UserController {
 	        return userService.save(user);
 	    }
 
+	    
+	    @GetMapping("/{userId}")
+	    public User getUser(@PathVariable Long userId) {
+	        return userService.findById(userId);
+	    }
+	    
+	    @PutMapping("/{userId}")
+	    public User updateUser(@PathVariable Long userId, @RequestBody User user) {
+	        // Additional logic to ensure you're updating the correct book
+	        return userService.save(user);
+	    }
+
+	    @DeleteMapping("/{userId}")
+	    public void deleteUser(@PathVariable Long userId) {
+	        userService.deleteById(userId);
+	    }
+
+
 }
 

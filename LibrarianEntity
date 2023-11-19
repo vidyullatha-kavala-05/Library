@@ -1,0 +1,47 @@
+package library.controller;
+
+import library.entity.*;
+import library.service.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/librarians")
+public class LibrarianController {
+
+	 @Autowired
+	    private LibrarianService librarianService;
+
+	    @GetMapping
+	    public List<Librarian> getAllLibrarians() {
+	        return librarianService.findAll();
+	    }
+
+	    @PostMapping
+	    public Librarian addLibrarian(@RequestBody Librarian librarian) {
+	        return librarianService.save(librarian);
+	    }
+	    
+	    @GetMapping("/{librarianId}")
+	    public Librarian getLibrarian(@PathVariable Long librarianId) {
+	        return librarianService.findById(librarianId);
+	    }
+	    
+	    @PutMapping("/{librarianId}")
+	    public Librarian updateLibrarian(@PathVariable Long librarianId, @RequestBody Librarian librarian) {
+	        // Additional logic to ensure you're updating the correct book
+	        return librarianService.save(librarian);
+	    }
+
+	    @DeleteMapping("/{librarianId}")
+	    public void deleteLibrarian(@PathVariable Long librarianId) {
+	    	librarianService.deleteById(librarianId);
+	    }
+
+
+}
+
+

@@ -1,0 +1,33 @@
+package library.service;
+
+import library.entity.*;
+import library.repository.*;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class LibrarianService {
+
+	@Autowired
+    private LibrarianRepository librarianRepository;
+
+    public List<Librarian> findAll() {
+        return librarianRepository.findAll();
+    }
+
+    public Librarian save(Librarian librarian) {
+        return librarianRepository.save(librarian);
+    }
+    
+    public Librarian findById(Long id) {
+        return librarianRepository.findById(id).orElse(null);
+    }
+
+    public void deleteById(Long id) {
+    	librarianRepository.deleteById(id);
+    }
+}
+

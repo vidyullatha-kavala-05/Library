@@ -1,9 +1,12 @@
 package library.controller;
 
 import library.entity.*;
+import library.exception.LibrarianNotFoundException;
 import library.service.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,10 +27,23 @@ public class LibrarianController {
 	    public Librarian addLibrarian(@RequestBody Librarian librarian) {
 	        return librarianService.save(librarian);
 	    }
-	    
+	    /*
 	    @GetMapping("/{librarianId}")
 	    public Librarian getLibrarian(@PathVariable Long librarianId) {
 	        return librarianService.findById(librarianId);
+	    }
+	    */
+	    
+	    @GetMapping("/{librarianId}")
+	    public ResponseEntity<?> findLibrarianById(@PathVariable Long librarianId) {
+	        try {
+	        	Librarian librarian = librarianService.findById(librarianId); // Try to find the user
+	            return ResponseEntity.ok(librarian); // Return the librarian if found
+	        } catch (LibrarianNotFoundException ex) {
+	            //return ResponseEntity.notFound().build();
+	            // Or you can return a custom error message:
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Librarian not found with ID: " + librarianId);
+	        }
 	    }
 	    
 	    @PutMapping("/{librarianId}")
@@ -35,13 +51,19 @@ public class LibrarianController {
 	        // Additional logic to ensure you're updating the correct book
 	        return librarianService.save(librarian);
 	    }
-
+	    
 	    @DeleteMapping("/{librarianId}")
-	    public void deleteLibrarian(@PathVariable Long librarianId) {
+	    public ResponseEntity<String> deleteLibrarian(@PathVariable Long librarianId) {
 	    	librarianService.deleteById(librarianId);
+	    	
+	    	String message = "Librarian with ID: " + librarianId + " deleted successfully.";
+	        return ResponseEntity.ok(message);
 	    }
+	    
 
 
 }
+
+
 
 

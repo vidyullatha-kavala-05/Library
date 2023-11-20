@@ -1,6 +1,7 @@
 package library.service;
 
 import library.entity.*;
+import library.exception.UserNotFoundException;
 import library.repository.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +22,24 @@ public class LibrarianService {
     public Librarian save(Librarian librarian) {
         return librarianRepository.save(librarian);
     }
-    
+   
     public Librarian findById(Long id) {
-        return librarianRepository.findById(id).orElse(null);
+    	Librarian librarian = librarianRepository.findById(id).orElse(null);
+        if (librarian == null) {
+            throw new UserNotFoundException("Librarian not found with ID: " + id);
+        }
+        return librarian;
     }
-
+    
     public void deleteById(Long id) {
+    	Librarian  librarian= findById(id); // Check if user exists before deleting
     	librarianRepository.deleteById(id);
+        displayDeletionConfirmation(id);
     }
-}
 
+    private void displayDeletionConfirmation(Long id) {
+        System.out.println("Librarian with ID: " + id + " deleted successfully.");
+        
+    }
+ 
+}

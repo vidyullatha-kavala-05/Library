@@ -1,0 +1,32 @@
+create database library_management_system;
+use library_management_system;
+
+CREATE TABLE user (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    userName VARCHAR(255),
+    userEmail VARCHAR(255),
+    userPhone VARCHAR(255),
+    userAddress VARCHAR(255)
+);
+select * from user;
+
+CREATE TABLE book (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    title VARCHAR(255),
+    author VARCHAR(255),
+    borrowed BOOLEAN,
+    user_id BIGINT,
+    FOREIGN KEY (user_id) REFERENCES user(id)
+);
+select * from book;
+
+
+CREATE TABLE librarian (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    librarianName VARCHAR(255),
+    librarianEmail VARCHAR(255),
+    librarianPhone VARCHAR(255),
+    librarianAdress VARCHAR(255)
+);
+select * from librarian;
+

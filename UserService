@@ -2,6 +2,7 @@ package library.service;
 
 import library.entity.*;
 import library.repository.*;
+import library.exception.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,12 +22,26 @@ public class UserService {
     public User save(User user) {
         return userRepository.save(user);
     }
-
+        
     public User findById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            throw new UserNotFoundException("User not found with ID: " + id);
+        }
+        return user;
     }
-
+    
     public void deleteById(Long id) {
-        userRepository.deleteById(id);
+    	User user = findById(id); // Check if user exists before deleting
+    	
+    	userRepository.deleteById(id);
+        displayDeletionConfirmation(id);
     }
+    
+    private void displayDeletionConfirmation(Long id) {
+        System.out.println("User with ID: " + id + " deleted successfully.");
+        
+    }
+ 
 }
+

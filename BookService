@@ -1,6 +1,7 @@
 package library.service;
 
 import library.entity.*;
+import library.exception.*;
 import library.repository.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,19 +21,39 @@ public class BookService {
     public List<Book> findAll() {
         return bookRepository.findAll();
     }
-
+    
     public Book findById(Long id) {
-        return bookRepository.findById(id).orElse(null);
+        Book book = bookRepository.findById(id).orElse(null);
+        if (book == null) {
+            throw new BookNotFoundException("Book not found with ID: " + id);
+        }
+        return book;
     }
-
+    
     public Book save(Book book) {
         return bookRepository.save(book);
     }
-
+    /*
     public void deleteById(Long id) {
         bookRepository.deleteById(id);
     }
 
+    */   
+    public void deleteById(Long id) {
+        Book book = findById(id); // Check if book exists before deleting
+        if (book.isBorrowed()) {
+            throw new BookNotAvailableException("Book is currently borrowed and cannot be deleted");
+        }
+        bookRepository.deleteById(id);
+        displayDeletionConfirmation(id);
+    }
+    
+    private void displayDeletionConfirmation(Long id) {
+        System.out.println("Book with ID: " + id + " deleted successfully.");
+        
+    }
+    
+    
     public Book borrowBook(Long bookId, Long userId) {
         Book book = findById(bookId);
         User user = userRepository.findById(userId).orElse(null);
